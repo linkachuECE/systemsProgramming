@@ -3,46 +3,11 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <wait.h>
+#include <signal.h>
+
+#include "queue.h"
 
 int child_dead = 0;
-
-struct node
-{
-	int data;
-	struct node *next;
-};
-
-struct queue
-{
-	struct node *head;
-	struct node *tail;
-};
-
-void enqueue(int item, struct queue *q){
-	struct node *p;
-	p = (struct node *)malloc(sizeof(struct node));
-	p->data = item;
-	p->next = NULL;
-	if (q->head == NULL)
-	{
-		q->head = q-> tail = p;
-	}
-	else
-	{
-		q->tail->next = p;
-		q->tail = p;
-	}
-}
-
-int dequeue(struct queue *q){
-	int item;
-	struct node *p;
-	item = q->head->data;
-	p = q->head;
-	q->head = q->head->next;
-	free(p);
-	return item;
-}
 
 void term_child(int sig_num){
 	signal(SIGCHLD, term_child);
@@ -83,8 +48,7 @@ int main(int argc, char const *argv[])
 	while(q.head!=NULL)
 	{
 		kill(q.head->data,SIGCONT);
-		//usleep(qt);
-		pause();
+		usleep(qt);
 		if (child_dead==0)
 		{
 			kill(q.head->data,SIGUSR1);
