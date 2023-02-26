@@ -1,0 +1,1 @@
+Since the signal handler in the parent process is being set to the value of the previous signal handler, and not onintr(), I cannot necessarily guarantee that the child function will exit properly.
