@@ -13,14 +13,15 @@ CFLAGS += -I$(INCDIR)
 QUEUESRC = $(SRCDIR)/queue.c
 
 # Define scheduler policies here
-SCHEDULERS := mfq sjf rr
+SCHEDULERS := mfq sjf rr fcfs
 SCHEDEXES := $(patsubst %, $(BINDIR)/%, $(SCHEDULERS))
 SCHEDSRCS := $(patsubst %, $(SRCDIR)/%.c, $(SCHEDULERS))
 
 # Define child processes to run
 CHILDPROCESS := p
 CHILDSRC := $(SRCDIR)/$(CHILDPROCESS).c
-CHILDEXES := $(BINDIR)/$(CHILDPROCESS)
+CHILDEXE := $(BINDIR)/$(CHILDPROCESS)
+CHILDEXES := $(CHILDEXE)1 $(CHILDEXE)2 $(CHILDEXE)3 $(CHILDEXE)4 $(CHILDEXE)5
 
 all: $(SCHEDEXES) $(CHILDEXES)
 
@@ -34,6 +35,10 @@ $(SCHEDEXES): $(SCHEDSRCS) $(QUEUESRC)
 	$(patsubst $(SRCDIR)/%.c, $(BINDIR)/%, $(SRC))))
 
 # Generate child process executables
+$(CHILDEXES): $(CHILDSRC)
+	for exe in $(CHILDEXES); do \
+		$(CC) $(CFLAGS) $(CHILDSRC) -o $$exe; \
+	done
 
 clean:
 	rm $(BINDIR)/*

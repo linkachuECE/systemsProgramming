@@ -1,0 +1,1 @@
+To run any of the programs, you will need to navigate to the "bin" directory after using "make" to generate the executables

@@ -12,4 +12,7 @@ struct queue
 	struct node *tail;
 };
 
+void enqueue(int item, struct queue *q);
+int dequeue(struct queue *q);
+
 #endif

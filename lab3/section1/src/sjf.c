@@ -4,63 +4,62 @@
 #include <sys/types.h>
 #include <wait.h>
 #include <signal.h>
+#include <string.h>
 
 #include "queue.h"
 
-int child_dead = 0;
+/*
+ *      AUTHOR: 		Ethan Braun
+ *      DATE CREATED:	02/25/23
+ *      DESCRIPTION: 	The purpose of this program is to simulate the functionality
+ * 						of a shortest-job-first scheduler
+ *      CONTRIBUTORS: 	None.
+ */
 
-void term_child(int sig_num){
-	signal(SIGCHLD, term_child);
-	child_dead = 1;
-}
-
-
-int main(int argc, char const *argv[])
-{
-	int qt, i, temp;
+int main(int argc, char const *argv[]){
+	int i, temp, pNo;
 	struct queue q;
-	struct node *p;
+	pNo = argc - 1;
 
-	if (argc>2)
-	{
-		qt = 1000*atoi(&argv[1][0]);
-	}
-	else
-	{
-		printf("%s qt prog1 [prog2] ... [prog[N}\n", argv[0]);
+	char processes[pNo][10];
+
+	// Check if command line arguments follow proper format
+	if(argc == 1){
+		printf("%s prog1 [prog2] ... [prog[N]]\n", argv[0]);
 		exit(-1);
 	}
+
+	// Move processes in argument list to a new array
+	for(int i = 0; i < pNo; i++){
+		strcpy(processes[i], argv[i + 1]);
+	}
+
+	// Sort the new array
+	qsort(processes, pNo, sizeof(processes[0]), strcmp);
+
+	// Initialize the queue
 	q.head = NULL;
 	q.tail = NULL;
-	signal(SIGCHLD, term_child);
 
-	for (i = 2; i < argc; i++)
-	{
-		printf("Message from father: Creating program %s\n", argv[i]);
-		if ((temp=fork())==0)
-		{
-			execl(argv[i],argv[i],NULL);
+	// Execute all executables provided via the command line, one by one
+	// Enqueue each process ID onto the queue
+	for (i = 0; i < pNo; i++){
+		printf("Message from father: Creating program %s\n", processes[i]);
+		if ((temp=fork())==0){
+			execl(processes[i],processes[i],NULL);
 		}
 		enqueue(temp,&q);
 	}
+
 	sleep(1);
-	printf("\nI am the Scheduler and I will now begin scheduling my programs:\n");
-	while(q.head!=NULL)
-	{
-		kill(q.head->data,SIGCONT);
-		usleep(qt);
-		if (child_dead==0)
-		{
-			kill(q.head->data,SIGUSR1);
-			usleep(1000);
-			enqueue(dequeue(&q),&q);
-		}
-		else
-		{
-			printf("A child is dead\n");
-			dequeue(&q);
-			child_dead=0;
-		}
+	printf("\nI am the Shortest-Job-First Scheduler and I will now begin scheduling my programs:\n");
+	
+	// Continue running while the queue contains elements
+	while(q.head!=NULL){
+		kill(q.head->data,SIGCONT);		// Signal child process to stop
+		wait(&temp);					// Allow process to execute fully until terminated
+		printf("A child is dead\n");	
+		dequeue(&q);					// Remove the process ID from the queue
 	}
 	printf("All of my children died so I commit suicide! Bye...\n");
 	return 0;

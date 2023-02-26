@@ -1,6 +1,24 @@
 #include "queue.h"
 #include <stdlib.h>
 
+/*
+ *      AUTHOR: 		Ethan Braun
+ *      DATE CREATED:	02/25/23
+ *      DESCRIPTION: 	The purpose of the queue functions is to provide a 
+ * 						mechanism for the scheduler to schedule processes
+ *      CONTRIBUTORS: 	None.
+ */
+
+/*
+ * Function:  enqueue 
+ * --------------------
+ * 	Adds an item onto the tail of the provided queue
+ *
+ *  item: 	Element to be added to the tail of the queue
+ * 	q:		The provided queue
+ *
+ *  returns: none
+ */
 void enqueue(int item, struct queue *q){
 	struct node *p;
 	p = (struct node *)malloc(sizeof(struct node));
@@ -17,6 +35,15 @@ void enqueue(int item, struct queue *q){
 	}
 }
 
+/*
+ * Function:  dequeue 
+ * --------------------
+ * 	Removes an element from the head of the queue and returns its data
+ *
+ * 	q:			queue to remove from
+ *
+ *  returns: 	data in head of queue
+ */
 int dequeue(struct queue *q){
 	int item;
 	struct node *p;
