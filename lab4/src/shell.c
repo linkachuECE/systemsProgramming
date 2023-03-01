@@ -157,6 +157,18 @@ void cont (int signum) {
 		pause();
 }
 
+void set_scheduling(char* scheduling_policy){
+	if(strcmp(scheduling_policy, "FCFS") == 0){
+
+	} else if (strcmp(scheduling_policy, "Round Robin") == 0){
+
+	} else if (strcmp(scheduling_policy, "MFQ") == 0){
+
+	} else {
+
+	}
+}
+
 int main(int argc, char const *argv[]) {
 	char input[15][30];
 	int argnum, i;
@@ -183,6 +195,7 @@ int main(int argc, char const *argv[]) {
 		else if (strcmp(input[0],"kill")==0 && argnum==1) mykill(atoi(input[1]));
 		else if (strcmp(input[0],"exec")==0 && argnum!=0) 
 			for (i=1; i<=argnum; i++) exec(input[i]);
+		else if (strcmp(input[0], "set_scheduling") == 0 && argnum == 1) set_scheduling(input[argnum]);
 		else if (strcmp(input[0],"exit")==0 && argnum==0) myexit();
 	    else printf("No such command. Check help for help.\n");
 	}
