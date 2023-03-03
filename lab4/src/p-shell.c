@@ -16,8 +16,6 @@ void stop (int sig_num) {
 
 
 int main (char *argc[], char *argv[]) {
-
-
 	int i,num,sltime;
 
 	signal(SIGQUIT,cont);

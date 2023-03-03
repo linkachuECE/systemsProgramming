@@ -14,10 +14,13 @@ int fg_suspended = 0;
 int run = 1;
 struct queue pid_list;
 
+enum sp{FCFS, RoundRobin, MFQ};
+enum sp scheduling_policy = FCFS;
+
 void help() {
 	printf("This is manual page\n");
 	printf("This shell supports the following commands:\n");
-	printf("\tver\n\texec\n\tps\n\tkill\n\thelp\n\texit\n");
+	printf("\tver\n\texec\n\tps\n\tkill\n\tset_scheduling\n\thelp\n\texit\n");
 	printf("For more details please type 'help command'\n");
 }
 
@@ -39,6 +42,10 @@ void helpcmd(char *cmd) {
 	else if (strcmp(cmd,"kill")==0)
 	{
 		printf("\nkill pid:\tEnds the process with the given pid\n");
+	}
+	else if (strcmp(cmd,"set_scheduling")==0)
+	{
+		printf("\nset_scheduling scheduling_policy:\tSets the policy to schedule tasks by. Takes one of three arguments:\n- \"FCFS\"\n- \"Round Robin\"\n- \"MFQ\"\n");
 	}
 	else if (strcmp(cmd,"help")==0)
 	{
@@ -72,43 +79,6 @@ void mykill(int pid) {
 	kill(pid,SIGTERM);
 	printf("You have just killed process %d\n",pid );
 }
-
-
-void exec(char *input) {
-	int i,t,status;
-	char *args[10];
-	char *temp;
-	struct node *p;
-
-	for (i = 0; i < 10; i++)
-	{
-		args[i]=(char *)malloc(10*sizeof(char));
-	}
-
-	strcpy(args[0],strtok(input,"(,"));
-	for (i=1; (temp=strtok(NULL,",)"))!=NULL; i++) 
-		strcpy(args[i],temp);
-	printf("\n");
-	if (strcmp(args[i-1],"&")==0)
-	{
-		args[i-1]=NULL;
-	}
-	else
-		args[i]=NULL;
-	if ((t=fork())==0)
-	{
-		execv(args[0],args);
-	}
-	enqueue(t,args[0],&pid_list);
-	if (args[i-1]!=NULL)
-	{
-		fg_pid=t;
-		while(fg_pid!=0 && fg_suspended!=1)
-			pause();
-	}
-
-}
-
 
 void myexit() {
 	char yesno;
@@ -157,16 +127,102 @@ void cont (int signum) {
 		pause();
 }
 
-void set_scheduling(char* scheduling_policy){
-	if(strcmp(scheduling_policy, "FCFS") == 0){
+void exec_FCFS(const char input[15][30], int argnum) {
+	for (int i=1; i<=argnum; i++){
+			
+		int j,t,status;
+		char *args[10];
+		char *temp;
+		struct node *p;
 
-	} else if (strcmp(scheduling_policy, "Round Robin") == 0){
+		for (j = 0; j < 10; j++)
+		{
+			args[j]=(char *)malloc(10*sizeof(char));
+		}
 
-	} else if (strcmp(scheduling_policy, "MFQ") == 0){
-
-	} else {
-
+		strcpy(args[0],strtok(input[i],"(,"));
+		for (j=1; (temp=strtok(NULL,",)"))!=NULL; j++) 
+			strcpy(args[j],temp);
+		printf("\n");
+		if (strcmp(args[j-1],"&")==0)
+		{
+			args[j-1]=NULL;
+		}
+		else
+			args[j]=NULL;
+		if ((t=fork())==0)
+		{
+			execv(args[0],args);
+		}
+		enqueue(t,args[0],&pid_list);
+		if (args[j-1]!=NULL)
+		{
+			fg_pid=t;
+			while(fg_pid!=0 && fg_suspended!=1)
+				pause();
+		}
 	}
+}
+
+void exec_RoundRobin(const char input[15][30], int argnum){
+
+}
+
+void exec_MFQ(const char input[15][30], int argnum){
+
+}
+
+void exec(const char input[15][30], int argnum) {
+	if(scheduling_policy == FCFS)
+		exec_FCFS(input, argnum);
+	else if(scheduling_policy == MFQ)
+		exec_MFQ(input, argnum);
+	else if(scheduling_policy == RoundRobin)
+		exec_RoundRobin(input, argnum);
+/*
+	int i,t,status;
+	char *args[10];
+	char *temp;
+	struct node *p;
+
+	for (i = 0; i < 10; i++)
+	{
+		args[i]=(char *)malloc(10*sizeof(char));
+	}
+
+	strcpy(args[0],strtok(input,"(,"));
+	for (i=1; (temp=strtok(NULL,",)"))!=NULL; i++) 
+		strcpy(args[i],temp);
+	printf("\n");
+	if (strcmp(args[i-1],"&")==0)
+	{
+		args[i-1]=NULL;
+	}
+	else
+		args[i]=NULL;
+	if ((t=fork())==0)
+	{
+		execv(args[0],args);
+	}
+	enqueue(t,args[0],&pid_list);
+	if (args[i-1]!=NULL)
+	{
+		fg_pid=t;
+		while(fg_pid!=0 && fg_suspended!=1)
+			pause();
+	}
+*/
+}
+
+void set_scheduling(char *input){
+	if(strcmp(input, "FCFS") == 0)
+		scheduling_policy = FCFS;
+	else if (strcmp(input, "Round") == 0)
+		scheduling_policy = RoundRobin;
+	else if (strcmp(input, "MFQ") == 0)
+		scheduling_policy = MFQ;
+	else
+		printf("Invalid scheduling policy\n");
 }
 
 int main(int argc, char const *argv[]) {
@@ -193,8 +249,7 @@ int main(int argc, char const *argv[]) {
 		else if (strcmp(input[0],"help")==0 && argnum==1) helpcmd(input[argnum]);
 		else if (strcmp(input[0],"ps")==0 && argnum==0) ps();
 		else if (strcmp(input[0],"kill")==0 && argnum==1) mykill(atoi(input[1]));
-		else if (strcmp(input[0],"exec")==0 && argnum!=0) 
-			for (i=1; i<=argnum; i++) exec(input[i]);
+		else if (strcmp(input[0],"exec")==0 && argnum!=0) exec(input, argnum);
 		else if (strcmp(input[0], "set_scheduling") == 0 && argnum == 1) set_scheduling(input[argnum]);
 		else if (strcmp(input[0],"exit")==0 && argnum==0) myexit();
 	    else printf("No such command. Check help for help.\n");
