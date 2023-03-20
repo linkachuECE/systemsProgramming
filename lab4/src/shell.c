@@ -8,7 +8,11 @@
 #include <sys/resource.h>
 #include "queue.h"
 
+#define FCFS 1
+#define ROUNDROBIN 2
+#define MFQ 3
 
+int schedPol = FCFS;
 int fg_pid = 0;
 int fg_suspended = 0;
 int run = 1;
@@ -17,7 +21,7 @@ struct queue pid_list;
 void help() {
 	printf("This is manual page\n");
 	printf("This shell supports the following commands:\n");
-	printf("\tver\n\texec\n\tps\n\tkill\n\thelp\n\texit\n");
+	printf("\tver\n\texec\n\tps\n\tkill\n\thelp\n\tset_scheduling\n\texit\n");
 	printf("For more details please type 'help command'\n");
 }
 
@@ -47,6 +51,10 @@ void helpcmd(char *cmd) {
 	else if (strcmp(cmd,"exit")==0)
 	{
 		printf("\nexit:\tEnds the experience of working in the new shell\n");
+	}
+	else if (strcmp(cmd,"set_scheduling")==0)
+	{
+		printf("\nset_scheduling:\tSets the scheduling policy to one of three values: FCFS, Round Robin, or MFQ\n");
 	}
 	else 
 	{
@@ -131,6 +139,18 @@ void myexit() {
 	}
 }
 
+void set_scheduling(char* input){
+	if(strcmp(input, "FCFS") == 0){
+		schedPol = FCFS;
+	} else if(strcmp(input, "Round") == 0){
+		schedPol = ROUNDROBIN;
+	} else if(strcmp(input, "MFQ") == 0){
+		schedPol = MFQ;
+	} else {
+		printf("Not a valid scheduling policy\n");
+	}
+}
+
 void childdead(int signum) {
 	int dead_pid, status;
 	
@@ -184,6 +204,7 @@ int main(int argc, char const *argv[]) {
 		else if (strcmp(input[0],"exec")==0 && argnum!=0) 
 			for (i=1; i<=argnum; i++) exec(input[i]);
 		else if (strcmp(input[0],"exit")==0 && argnum==0) myexit();
+		else if (strcmp(input[0],"set_scheduling")==0 && argnum>0) set_scheduling(input[1]);
 	    else printf("No such command. Check help for help.\n");
 	}
 
