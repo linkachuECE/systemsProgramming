@@ -170,11 +170,32 @@ void susp (int signum) {
 	printf("All processes supspended\n");
 }
 
-void cont (int signum) {
+void cont(int signum) {
 	fg_suspended=0;
 	printf("Waking all processes...\n");
 	while (fg_pid!=0 && fg_suspended!=1)
 		pause();
+}
+
+void execRoundRobin(){
+
+}
+
+void execFCFS(){
+
+}
+
+void execMFQ(){
+
+}
+
+void myExec(){
+	if(schedPol == FCFS)
+		execFCFS();
+	if(schedPol == ROUNDROBIN)
+		execRoundRobin();
+	if(schedPol == MFQ)
+		execMFQ();
 }
 
 int main(int argc, char const *argv[]) {
