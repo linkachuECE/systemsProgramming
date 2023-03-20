@@ -177,28 +177,29 @@ void cont(int signum) {
 		pause();
 }
 
-void execRoundRobin(){
+void execRoundRobin(char programs[15][30], int num){
 
 }
 
-void execFCFS(){
+void execFCFS(char programs[15][30], int num){
+	for(int i = 0; i < num; i++)
+		exec(programs[i]);
+}
+
+void execMFQ(char programs[15][30], int num){
 
 }
 
-void execMFQ(){
-
-}
-
-void myExec(){
+void myExec(char programs[15][30], int num){
 	if(schedPol == FCFS)
-		execFCFS();
+		execFCFS(programs, num);
 	if(schedPol == ROUNDROBIN)
-		execRoundRobin();
+		execRoundRobin(programs, num);
 	if(schedPol == MFQ)
-		execMFQ();
+		execMFQ(programs, num);
 }
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char* argv[]) {
 	char input[15][30];
 	int argnum, i;
 
@@ -222,8 +223,7 @@ int main(int argc, char const *argv[]) {
 		else if (strcmp(input[0],"help")==0 && argnum==1) helpcmd(input[argnum]);
 		else if (strcmp(input[0],"ps")==0 && argnum==0) ps();
 		else if (strcmp(input[0],"kill")==0 && argnum==1) mykill(atoi(input[1]));
-		else if (strcmp(input[0],"exec")==0 && argnum!=0) 
-			for (i=1; i<=argnum; i++) exec(input[i]);
+		else if (strcmp(input[0],"exec")==0 && argnum!=0) myExec(input + 1, argnum);
 		else if (strcmp(input[0],"exit")==0 && argnum==0) myexit();
 		else if (strcmp(input[0],"set_scheduling")==0 && argnum>0) set_scheduling(input[1]);
 	    else printf("No such command. Check help for help.\n");
