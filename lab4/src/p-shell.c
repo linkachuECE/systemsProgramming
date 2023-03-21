@@ -15,7 +15,7 @@ void stop (int sig_num) {
 }
 
 
-int main(char *argc[], char *argv[]) {
+int main(int argc, char *argv[]) {
 	int i, num, sltime;
 
 	signal(SIGQUIT, cont);
@@ -23,6 +23,8 @@ int main(char *argc[], char *argv[]) {
 	
 	num = atoi(argv[1]);
 	sltime = 1000*atoi(argv[2]);
+
+	pause();
 	
 	for (i = 1; i <= num; i++){
 		printf("This is program %s and it prints for the %d time of %d...\n", argv[0], i, num);

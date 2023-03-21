@@ -18,8 +18,11 @@ int fg_pid = 0;
 int fg_suspended = 0;
 int run = 1;
 struct queue pid_list;
+int child_dead = 0;
 
-int tq[2];
+#define INITTQ 1000
+int tq[] = {INITTQ, INITTQ, INITTQ, INITTQ, INITTQ, INITTQ, INITTQ, INITTQ, INITTQ, INITTQ};
+int queueNum = 2;
 
 void help() {
 	printf("This is manual page\n");
@@ -58,7 +61,7 @@ void ps() {
 	struct node *p;
 	printf("\nNEW SHELL presents the following living processes\n");
 	printf("\tPID\tNAME\n");
-	for (p=pid_list.head; p!=NULL; p=p->next){
+	for (p = pid_list.head; p != NULL; p = p->next){
 		printf("\t%d\t%s\n",p->pid,p->name);
 	}
 }
@@ -68,11 +71,10 @@ void mykill(int pid) {
 	printf("You have just killed process %d\n", pid);
 }
 
-void exec(char *input) {
-	int i,t,status;
+int exec(char *input) {
+	int i,t;
 	char *args[10];
 	char *temp;
-	struct node *p;
 
 	for (i = 0; i < 10; i++){
 		args[i]=(char *)malloc(10*sizeof(char));
@@ -90,12 +92,104 @@ void exec(char *input) {
 		execv(args[0], args);
 	}
 	enqueue(t,args[0], &pid_list);
-	if (args[i-1]!=NULL){
-		fg_pid = t;
-		while(fg_pid != 0 && fg_suspended != 1)
-			pause();
+	// printf("t: %d\n", t);
+	// if (args[i-1]!=NULL){
+	// 	fg_pid = t;
+	// 	while(fg_pid != 0 && fg_suspended != 1)
+	// 		pause();
+	// }
+
+	return t;
+}
+
+void execFCFS(char programs[15][30], int num){
+	for(int i = 0; i < num; i++){
+		int pd = exec(programs[i]);
+		usleep(500);
+		kill(pd, SIGQUIT);
+		pause();
+		child_dead = 0;
+	}
+}
+
+void execRoundRobin(char programs[15][30], int num){
+	struct queue rr;
+	rr.head = NULL;
+
+	for(int i = 0; i < num; i++){
+		int pid = exec(programs[i]);
+		usleep(500);
+		enqueue(pid, "p", &rr);
 	}
 
+	printf("Executing Round Robin scheduling with a time quantum of %d\n", *tq);
+	while(rr.head){
+		printf("Continuing child process %d\n", rr.head->pid);
+		kill(rr.head->pid, SIGQUIT);
+		usleep(*tq);
+		if(child_dead){
+			printf("A child is dead\n");
+			dequeue(&rr);
+			child_dead = 0;
+		} else {
+			printf("Stopping child process %d\n", rr.head->pid);
+			kill(rr.head->pid, SIGTSTP);
+			usleep(1000);
+			enqueue(dequeue(&rr), "p", &rr);
+		}
+	}
+}
+
+void execMFQ(char programs[15][30], int num){
+	struct queue queueList[queueNum];
+	for(int i = 0; i < queueNum; i++){
+		queueList[i].head = NULL;
+		queueList[i].tail = NULL;
+	}
+
+	for(int i = 0; i < num; i++){
+		int pid = exec(programs[i]);
+		usleep(500);
+		enqueue(pid, "p", &queueList[0]);
+	}
+
+	printf("Executing MFQ scheduling\n");
+
+	for(int i = 0; i < queueNum;){
+		int nextQueue = (i == (queueNum - 1)) ? 0 : i + 1;
+		if(!queueList[i].head && !queueList[nextQueue].head){
+			printf("\n");
+			break;
+		}
+
+		printf("Running processes in queue %d in %dms timeslices\n", i+1, tq[i] / 1000);
+		while(queueList[i].head){
+			printf("Continuing child process %d\n", queueList[i].head->pid);
+			kill(queueList[i].head->pid, SIGQUIT);
+			usleep(tq[i]);
+			if(child_dead){
+				printf("A child is dead\n");
+				dequeue(&queueList[i]);
+				child_dead = 0;
+			} else {
+				printf("Stopping child process %d\n", queueList[i].head->pid);
+				kill(queueList[i].head->pid, SIGTSTP);
+				usleep(1000);
+				enqueue(dequeue(&queueList[i]), "p", &queueList[nextQueue]);
+			}
+		}
+		printf("\n");
+		i = nextQueue;
+	}
+}
+
+void execAll(char programs[15][30], int num){
+	if(schedPol == FCFS)
+		execFCFS(programs, num);
+	if(schedPol == ROUNDROBIN)
+		execRoundRobin(programs, num);
+	if(schedPol == MFQ)
+		execMFQ(programs, num);
 }
 
 void myexit() {
@@ -118,16 +212,31 @@ void myexit() {
 void set_scheduling(char* input){
 	if(strcmp(input, "FCFS") == 0){
 		schedPol = FCFS;
+		printf("Scheduling policy changed to First-Come, First-Served\n");
 	} else if(strcmp(input, "Round") == 0){
 		schedPol = ROUNDROBIN;
-		printf("Please enter a time quantum: ");
+		printf("Please enter a time quantum (in ms): ");
 		scanf("%d", tq);
+		*tq *= 1000;
+
+		printf("Scheduling policy changed to Round Robin\n");
 	} else if(strcmp(input, "MFQ") == 0){
 		schedPol = MFQ;
-		printf("Please enter a time quantum for queue 1: ");
-		scanf("%d", tq);
-		printf("Please enter a time quantium for queue 2: ");
-		scanf("%d", tq + 1);
+
+		do {
+			printf("Please enter the number of queues you'd like to use: ");
+			scanf("%d", &queueNum);
+			if(queueNum > 10)
+				printf("Please provide a number between 1 and 10\n");
+		} while (queueNum > 10 || queueNum < 1);
+
+		for(int i = 0; i < queueNum; i++){
+			printf("Please enter a time quantum (in ms) for queue %d: ", i + 1);
+			scanf("%d", tq + i);
+			tq[i] *= 1000;
+		}
+
+		printf("Scheduling policy changed to Multi-feedback Queue\n");
 	} else {
 		printf("Not a valid scheduling policy\n");
 	}
@@ -144,6 +253,8 @@ void childdead(int signum) {
 	if (dead_pid == fg_pid){
 		fg_pid=0;
 	}
+
+	child_dead = 1;
 }
 
 void susp (int signum) {
@@ -158,33 +269,9 @@ void cont(int signum) {
 		pause();
 }
 
-void execFCFS(char programs[15][30], int num){
-	for(int i = 0; i < num; i++)
-		exec(programs[i]);
-}
-
-void execRoundRobin(char programs[15][30], int num){
-	for(int i = 0; i < num; i++){
-		exec(programs[i]);
-	}
-}
-
-void execMFQ(char programs[15][30], int num){
-
-}
-
-void execAll(char programs[15][30], int num){
-	if(schedPol == FCFS)
-		execFCFS(programs, num);
-	if(schedPol == ROUNDROBIN)
-		execRoundRobin(programs, num);
-	if(schedPol == MFQ)
-		execMFQ(programs, num);
-}
-
 int main(int argc, char* argv[]) {
 	char input[15][30];
-	int argnum, i;
+	int argnum;
 
 	pid_list.head=NULL;
 	pid_list.tail=NULL;
