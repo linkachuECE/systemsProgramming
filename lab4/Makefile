@@ -1,6 +1,6 @@
 all:
-	gcc -Wall -g -Iinc src/shell.c -o bin/shell
-	gcc -Wall -g -Iinc src/p-shell.c -o bin/p
+	gcc src/shell.c -Wall -g -Iinc -o bin/shell
+	gcc src/p-shell.c -Wall -g -Iinc -o bin/p
 
 clean:
-	rm -r bin/*
+	rm bin/*
