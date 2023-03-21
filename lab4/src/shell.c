@@ -19,6 +19,8 @@ int fg_suspended = 0;
 int run = 1;
 struct queue pid_list;
 
+int tq[2];
+
 void help() {
 	printf("This is manual page\n");
 	printf("This shell supports the following commands:\n");
@@ -66,7 +68,6 @@ void mykill(int pid) {
 	printf("You have just killed process %d\n", pid);
 }
 
-
 void exec(char *input) {
 	int i,t,status;
 	char *args[10];
@@ -97,7 +98,6 @@ void exec(char *input) {
 
 }
 
-
 void myexit() {
 	char yesno;
 	if (pid_list.head == pid_list.tail){
@@ -120,8 +120,14 @@ void set_scheduling(char* input){
 		schedPol = FCFS;
 	} else if(strcmp(input, "Round") == 0){
 		schedPol = ROUNDROBIN;
+		printf("Please enter a time quantum: ");
+		scanf("%d", tq);
 	} else if(strcmp(input, "MFQ") == 0){
 		schedPol = MFQ;
+		printf("Please enter a time quantum for queue 1: ");
+		scanf("%d", tq);
+		printf("Please enter a time quantium for queue 2: ");
+		scanf("%d", tq + 1);
 	} else {
 		printf("Not a valid scheduling policy\n");
 	}
@@ -158,7 +164,9 @@ void execFCFS(char programs[15][30], int num){
 }
 
 void execRoundRobin(char programs[15][30], int num){
-
+	for(int i = 0; i < num; i++){
+		exec(programs[i]);
+	}
 }
 
 void execMFQ(char programs[15][30], int num){
