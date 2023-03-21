@@ -1,16 +1,24 @@
+/*
+ *      AUTHOR: 		Ethan Braun
+ *      DATE CREATED: 	03/21/23
+ *      DESCRIPTION: 	The purpose of this header is to provide a data structure for keeping track of processes and process ID
+ *      CONTRIBUTORS: 	None. I did not create this file, but downloaded it as is from D2L and added my own comments
+ */
+
+// Node structure, which can contain a PID and name of the process
 struct node {
 	int pid;
 	char *name;
 	struct node *next;
 };
 
-
+// Queue structure
 struct queue {
 	struct node *head;
 	struct node *tail;
 };
 
-     
+// Adds process to tail of queue
 void enqueue(int item, char *s, struct queue *q) {
 	struct node *p;						
 
@@ -25,7 +33,7 @@ void enqueue(int item, char *s, struct queue *q) {
 	}
 }
 
-
+// Pops process from head of queue and returns it
 int dequeue(struct queue *q) {
 	int item;
 	struct node *p;
@@ -37,6 +45,7 @@ int dequeue(struct queue *q) {
 	return item;
 }
 
+// Delets a process from the queue
 void delete(struct queue *q, int key) {
 	if (q->head->pid == key){
 		struct node *p = q->head;

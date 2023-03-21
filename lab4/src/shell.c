@@ -9,21 +9,33 @@
 
 #include "queue.h"
 
+/*
+ *      AUTHOR: 		Ethan Braun
+ *      DATE CREATED: 	03/21/23
+ *      DESCRIPTION: 	The purpose of this program is to simulate the functionality of a shell, with multiple possible scheduling policies
+ *      CONTRIBUTORS: 	None.
+ */
+
+
+// Macros for scheduling policies
 #define FCFS 1
 #define ROUNDROBIN 2
 #define MFQ 3
 
-int schedPol = FCFS;
-int fg_pid = 0;
-int fg_suspended = 0;
-int run = 1;
-struct queue pid_list;
-int child_dead = 0;
+// Globals
+int schedPol = FCFS;	// Scheduling policy
+int fg_pid = 0;			// Foreground PID
+int fg_suspended = 0;	// Keeps track if foreground PID is suspended
+int run = 1;			// Ends shell if set to 0
+struct queue pid_list;	// List of PID's for ps command
+int child_dead = 0;		// Set to 1 if a child process has been killed or terminated
 
+// Round Robin and MFQ time quantums
 #define INITTQ 1000
 int tq[] = {INITTQ, INITTQ, INITTQ, INITTQ, INITTQ, INITTQ, INITTQ, INITTQ, INITTQ, INITTQ};
-int queueNum = 2;
+int queueNum = 2;	// Number of queues for MFQ
 
+// Manual page
 void help() {
 	printf("This is manual page\n");
 	printf("This shell supports the following commands:\n");
@@ -31,6 +43,7 @@ void help() {
 	printf("For more details please type 'help command'\n");
 }
 
+// Displays manual for individual commands
 void helpcmd(char *cmd) {
 	printf("This is manual page\n\n");
 	if (strcmp(cmd, "ver") == 0) {
@@ -53,10 +66,12 @@ void helpcmd(char *cmd) {
 	}
 }
 
+// Verifies that the shell is working
 void ver() {
 	printf("\nNew Shell. Works properly!!\n");
 }
 
+// Displays list of child process names and PIDs
 void ps() {
 	struct node *p;
 	printf("\nNEW SHELL presents the following living processes\n");
@@ -66,11 +81,13 @@ void ps() {
 	}
 }
 
+// Kills a child process
 void mykill(int pid) {
 	kill(pid, SIGTERM);
 	printf("You have just killed process %d\n", pid);
 }
 
+// Executes a single program and loads the PID onto the PID queue
 int exec(char *input) {
 	int i,t;
 	char *args[10];
@@ -92,16 +109,11 @@ int exec(char *input) {
 		execv(args[0], args);
 	}
 	enqueue(t,args[0], &pid_list);
-	// printf("t: %d\n", t);
-	// if (args[i-1]!=NULL){
-	// 	fg_pid = t;
-	// 	while(fg_pid != 0 && fg_suspended != 1)
-	// 		pause();
-	// }
 
 	return t;
 }
 
+// Execute processes in a first-come first-serve queue
 void execFCFS(char programs[15][30], int num){
 	for(int i = 0; i < num; i++){
 		int pd = exec(programs[i]);
@@ -112,6 +124,7 @@ void execFCFS(char programs[15][30], int num){
 	}
 }
 
+// Execute processes with a round robin scheduling policy
 void execRoundRobin(char programs[15][30], int num){
 	struct queue rr;
 	rr.head = NULL;
@@ -140,6 +153,7 @@ void execRoundRobin(char programs[15][30], int num){
 	}
 }
 
+// Execute process with a multi-feedback queue scheduling policy
 void execMFQ(char programs[15][30], int num){
 	struct queue queueList[queueNum];
 	for(int i = 0; i < queueNum; i++){
@@ -183,6 +197,7 @@ void execMFQ(char programs[15][30], int num){
 	}
 }
 
+// Directs to one of the three scheduling policies based on the configuration
 void execAll(char programs[15][30], int num){
 	if(schedPol == FCFS)
 		execFCFS(programs, num);
@@ -192,6 +207,7 @@ void execAll(char programs[15][30], int num){
 		execMFQ(programs, num);
 }
 
+// Exit the shell
 void myexit() {
 	char yesno;
 	if (pid_list.head == pid_list.tail){
@@ -209,6 +225,7 @@ void myexit() {
 	}
 }
 
+// Set the scheduling policy
 void set_scheduling(char* input){
 	if(strcmp(input, "FCFS") == 0){
 		schedPol = FCFS;
@@ -242,6 +259,7 @@ void set_scheduling(char* input){
 	}
 }
 
+// Signal handler for when a child process dies
 void childdead(int signum) {
 	int dead_pid, status;
 	
@@ -257,11 +275,13 @@ void childdead(int signum) {
 	child_dead = 1;
 }
 
-void susp (int signum) {
+// Signal handler for when the shell is stopped
+void susp(int signum) {
 	fg_suspended = 1;
 	printf("All processes supspended\n");
 }
 
+// Signal handler for when the shell is continued
 void cont(int signum) {
 	fg_suspended = 0;
 	printf("Waking all processes...\n");
@@ -286,7 +306,7 @@ int main(int argc, char* argv[]) {
 
 	while (run){
 		printf("=>");
-		for (argnum=0; (scanf("%s",&input[argnum]))==1;argnum++)
+		for (argnum=0; (scanf("%s",input[argnum]))==1;argnum++)
 			if (getchar() == '\n') break;
 		if (strcmp(input[0],"ver") == 0 && argnum==0) ver();
 		else if (strcmp(input[0],"help") == 0 && argnum == 0) help();
