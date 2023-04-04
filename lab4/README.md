@@ -1,0 +1,2 @@
+To compile output files, simply navigate to the main directory and enter "make". The output files will go into the "bin" directory. Navigate to "bin" and enter "./shell" to execute properly
+To clear "bin", enter "make clean"
