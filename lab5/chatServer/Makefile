@@ -1,5 +1,8 @@
-FLAGS = -g -Wall -lpthread
+FLAGS = -g -Wall -pthread
 
 all:
-	$(CC) $(FLAGS) src/client.c -o bin/client
-	$(CC) $(FLAGS) src/server.c -o bin/server
+	gcc $(FLAGS) src/client.c -o bin/client
+	gcc $(FLAGS) src/server.c -o bin/server
+
+clean:
+	rm bin/*

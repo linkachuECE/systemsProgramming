@@ -9,12 +9,21 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <pthread.h>
+#include <semaphore.h>
 
 #define PORT 4444
 #define BUFFER_SIZE 1024
 #define MAX_CLIENTS 10
 
 int server_fd, client_fd;
+
+int promptPrinted = 0;
+sem_t promptSem;
+
+void printPrompt(){
+    printf("Enter a message: ");
+    promptPrinted = 1;
+}
 
 int serverSetup(int port){
     struct sockaddr_in server_addr;
@@ -50,14 +59,19 @@ int serverSetup(int port){
 void* sendTo(void* arg){
     while(1){
         char buffer[BUFFER_SIZE];
-        printf("Enter message: ");
+        
+        sem_wait(&promptSem);
+        if(!promptPrinted)
+            printPrompt();
+        sem_post(&promptSem);
+        
         fgets(buffer, BUFFER_SIZE, stdin);
 
         if(strcmp("Close", buffer) == 0)
             break;
 
-        // Send message to the server
-        send(server_fd, buffer, strlen(buffer), 0);
+        // Send message to the client
+        send(client_fd, buffer, strlen(buffer), 0);
     }
 
     return NULL;
@@ -68,14 +82,22 @@ void* recvFrom(void* arg){
         char buffer[BUFFER_SIZE];
         memset(buffer, 0, BUFFER_SIZE);
 
-        int bytes_received = recv(server_fd, buffer, BUFFER_SIZE, 0);
+        int bytes_received = recv(client_fd, buffer, BUFFER_SIZE, 0);
 
         if (bytes_received <= 0) {
             printf("Connection closed by server.\n");
             break;
         }
 
-        printf("Server: %s\n", buffer);
+        printf("\nClient: %s\n", buffer);
+
+        promptPrinted = 0;
+
+        sem_wait(&promptSem);
+        if(!promptPrinted)
+            printPrompt();
+
+        sem_post(&promptSem);
     }
 
     return NULL;
@@ -93,11 +115,15 @@ int main() {
     }
 
     pthread_t send_id, receive_id;
+    
+    sem_init(&promptSem, 0, 1);
 
     pthread_create(&send_id, NULL, sendTo, NULL);
     pthread_create(&receive_id, NULL, recvFrom, NULL);
 
     pthread_join(send_id, NULL);
     pthread_join(receive_id, NULL);
+
+    sem_close(&promptSem);
 
 }

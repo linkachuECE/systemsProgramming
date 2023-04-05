@@ -40,7 +40,7 @@ void* recvFrom(void* arg){
             break;
         }
 
-        printf("Server: %s\n", buffer);
+        printf("\nServer: %s\n", buffer);
     }
     
     return NULL;
