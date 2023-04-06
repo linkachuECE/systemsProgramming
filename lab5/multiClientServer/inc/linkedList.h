@@ -3,6 +3,7 @@
 
 #include "bool.h"
 #include <arpa/inet.h>
+#include "linkedList.h"
 
 typedef struct node {
    int port;
@@ -31,5 +32,8 @@ struct node* find(int PID, node* head);
 struct node* deleteNode(int PID, node* head);
 
 void sort(node* head);
+
+// Delete entire list
+void deleteList(node* head);
 
 #endif

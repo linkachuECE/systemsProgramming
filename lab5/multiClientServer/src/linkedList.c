@@ -1,3 +1,10 @@
+/*
+ *      AUTHOR: 		   Ethan Braun
+ *      DATE CREATED: 	04/05/23
+ *      DESCRIPTION: 	This is a linked list data structure used to keep track of client connections
+ *      CONTRIBUTORS: 	Copied from https://www.tutorialspoint.com/data_structures_algorithms/linked_list_program_in_c.htm and tweaked
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -6,13 +13,13 @@
 #include "linkedList.h"
 #include "bool.h"
 
-//display the list
+// Display the list
 void printList(node* head) {
    printf("Current clients:\n");
    printf("%-8s %10s %8s\n", "Process", "IP", "Port");
    node *ptr = head;
 	
-   //start from the beginning
+   // Start from the beginning
    while(ptr != NULL) {
       printf("%-8d %10s %8d\n", ptr->pid, ptr->ip, ptr->port);
       ptr = ptr->next;
@@ -20,38 +27,38 @@ void printList(node* head) {
 	
 }
 
-//insert link at the first location
+// Insert link at the first location
 node* insertFirst(int pid, int port, char* ip, node* head) {
-   //create a link
+   // Create a link
    node *link = (struct node*) malloc(sizeof(struct node));
 	
    link->pid = pid;
    link->port = port;
    strcpy(link->ip, ip);
 	
-   //point it to old first node
+   // Point it to old first node
    link->next = head;
 	
-   //point first to new first node
+   // Point first to new first node
    head = link;
 
    return head;
 }
 
-//delete first item
+// Delete first item
 node* deleteFirst(node* head) {
 
-   //save reference to first link
+   // Save reference to first link
    struct node *tempLink = head;
 	
-   //mark next to first link as first 
+   // Mark next to first link as first 
    head = head->next;
 	
-   //return the deleted link
+   // Return the deleted link
    return tempLink;
 }
 
-//is list empty
+// Is list empty
 bool isEmpty(node* head) {
    return (head == NULL);
 }
@@ -67,65 +74,64 @@ int length(node* head) {
    return length;
 }
 
-//find a link with given pid
+// Find a link with given pid
 node* find(int pid, node* head) {
 
-   //start from the first link
+   // Start from the first link
    struct node* current = head;
 
-   //if list is empty
+   // If list is empty
    if(head == NULL) {
       return NULL;
    }
 
-   //navigate through list
+   // Navigate through list
    while(current->pid != pid) {
 	
-      //if it is last node
+      // If it is last node
       if(current->next == NULL) {
          return NULL;
       } else {
-         //go to next link
+         // Go to next link
          current = current->next;
       }
    }      
 	
-   //if port found, return the current Link
+   // If port found, return the current Link
    return current;
 }
 
-//delete a link with given pid
+// Delete a link with given pid
 node* deleteNode(int pid, node* head) {
 
-   //start from the first link
+   // Start from the first link
    node* current = head;
    node* previous = NULL;
 	
-   //if list is empty
+   // If list is empty
    if(head == NULL) {
       return NULL;
    }
 
-   //navigate through list
-   while(current->pid != pid) {
-
-      //if it is last node
-      if(current->next == NULL) {
+   // Navigate through list
+   while(current->pid != pid){
+      // If it is last node
+      if(current->next == NULL){
          return NULL;
       } else {
-         //store reference to current link
+         // Store reference to current link
          previous = current;
-         //move to next link
+         // Move to next link
          current = current->next;
       }
    }
 
-   //found a match, update the link
-   if(current == head) {
-      //change first to point to next link
+   // Found a match, update the link
+   if(current == head){
+      // Change first to point to next link
       head = head->next;
    } else {
-      //bypass the current link
+      // Bypass the current link
       previous->next = current->next;
    }    
 	
@@ -133,7 +139,6 @@ node* deleteNode(int pid, node* head) {
 }
 
 void sort(node* head) {
-
    int i, j, k, tempPid, tempData;
    node *current;
    node *next;
@@ -143,13 +148,13 @@ void sort(node* head) {
    int size = length(head);
    k = size ;
 	
-   for ( i = 0 ; i < size - 1 ; i++, k-- ) {
+   for(i = 0; i < size - 1; i++, k--){
       current = head;
       next = head->next;
 		
-      for ( j = 1 ; j < k ; j++ ) {   
+      for (j = 1; j < k; j++){   
 
-         if ( current->port > next->port ) {
+         if (current->port > next->port){
             tempData = current->port;
             current->port = next->port;
             next->port = tempData;
@@ -167,4 +172,12 @@ void sort(node* head) {
          next = next->next;
       }
    }   
+}
+
+void deleteList(node* head){
+   node *curr, *next;
+   for(curr = head, next = curr->next; curr->next; curr = next, next = curr->next)
+      free(curr);
+
+   free(curr);
 }

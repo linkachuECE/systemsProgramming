@@ -1,3 +1,11 @@
+/*
+ *      AUTHOR: 		Ethan Braun
+ *      DATE CREATED: 	04/05/23
+ *      DESCRIPTION: 	This is used to set up the server before splitting it into a parent
+ *                      which handles the server socket, and children which handles individual client connections
+ *      CONTRIBUTORS: 	None
+ */
+
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -13,10 +21,12 @@
 #include "serverParent.h"
 #include "serverChild.h"
 
+// Defaults and maxes
 #define PORT 4444
 #define BUFFER_SIZE 1024
 #define MAX_CLIENTS 10
 
+// Initial server setup
 int serverSetup(int port){
     struct sockaddr_in server_addr;
 

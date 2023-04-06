@@ -1,3 +1,11 @@
+/*
+ *      AUTHOR: 		Ethan Braun
+ *      DATE CREATED: 	04/05/23
+ *      DESCRIPTION: 	The purpose of this program is to establish a client socket to
+ *                      connect to an echo server which will parrot whatever data it is sent
+ *      CONTRIBUTORS: 	None.
+ */
+
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -6,15 +14,20 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+// Defaults
 #define PORT 4444
+
+// Max sizes
 #define BUFFER_SIZE 1024
 
 int main(int argc, char *argv[]) {
+    // Establish usage
     if (argc != 2) {
         fprintf(stderr, "Usage: %s <server_ip>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
+    // Socket file descriptor, socket structure, and data buffer
     int client_fd;
     struct sockaddr_in server_addr;
     char buffer[BUFFER_SIZE];

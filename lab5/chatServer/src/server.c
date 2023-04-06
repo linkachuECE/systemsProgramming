@@ -1,3 +1,11 @@
+/*
+ *      AUTHOR: 		Ethan Braun
+ *      DATE CREATED: 	04/05/23
+ *      DESCRIPTION: 	The purpose of the functions in this file is to setup a 
+ *                      server socket before launching the chat room
+ *      CONTRIBUTORS: 	None.
+ */
+
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -10,22 +18,25 @@
 #include <sys/types.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <getopt.h>
 
-#define PORT 4444
-#define BUFFER_SIZE 1024
-#define MAX_CLIENTS 10
+#include "chat.h"
 
+// Default values
+#define DEFAULTPORT         4444
+#define DEFAULTIP           "0.0.0.0"
+#define DEFAULTUSERNAME     "Server"
+
+// Maximum sizes
+#define BUFFER_SIZE         1024
+#define MAXUSERNAMELENGTH   50
+
+// Socket file descriptors
 int server_fd, client_fd;
 
-int promptPrinted = 0;
-sem_t promptSem;
 
-void printPrompt(){
-    printf("Enter a message: ");
-    promptPrinted = 1;
-}
-
-int serverSetup(int port){
+// Function to set up the server
+int serverSetup(int port, char* ip){
     struct sockaddr_in server_addr;
 
     // Create a socket
@@ -36,7 +47,7 @@ int serverSetup(int port){
 
     // Configure server address
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
+    inet_pton(AF_INET, ip, &(server_addr.sin_addr));
     server_addr.sin_port = htons(port);
 
     // Bind the socket to the server address
@@ -51,79 +62,79 @@ int serverSetup(int port){
         exit(EXIT_FAILURE);
     }
 
-    printf("Server listening on port %d...\n\n", port);
+    printf("Server listening on port %d...\n", port);
 
     return server_fd;
 }
 
-void* sendTo(void* arg){
-    while(1){
-        char buffer[BUFFER_SIZE];
-        
-        sem_wait(&promptSem);
-        if(!promptPrinted)
-            printPrompt();
-        sem_post(&promptSem);
-        
-        fgets(buffer, BUFFER_SIZE, stdin);
-
-        if(strcmp("Close", buffer) == 0)
-            break;
-
-        // Send message to the client
-        send(client_fd, buffer, strlen(buffer), 0);
+// Displays information and handles arguments before setting up and launching the server
+int main(int argc, char* argv[]) {
+    if(argc > 1 && strcmp(argv[1], "--help") == 0){
+        printf("chatServer: %s [-u <username>] [-p <port>] [-i <IP_address>]\n\
+\tCreate a server chat room to communicate with a client\n\
+\tOptions:\n\
+\t\t-i <IP_address>\tSpecify an IP address to listen for (default: 0.0.0.0)\n\
+\t\t-p <port>\tSpecify a port number to listen on (default: 4444)\n\
+\t\t-u <username>\tSpecify a username to use (default: Server)\n", argv[0]);
+        exit(0);
     }
 
-    return NULL;
-}
-
-void* recvFrom(void* arg){
-    while(1){
-        char buffer[BUFFER_SIZE];
-        memset(buffer, 0, BUFFER_SIZE);
-
-        int bytes_received = recv(client_fd, buffer, BUFFER_SIZE, 0);
-
-        if (bytes_received <= 0) {
-            printf("Connection closed by server.\n");
-            break;
+    // Set values to the default to start
+    int port = DEFAULTPORT;
+    char username[MAXUSERNAMELENGTH] = DEFAULTUSERNAME;
+    char ip[50] = DEFAULTIP;
+    
+    // Process arguments and option flags
+    int opt;
+    while((opt = getopt(argc, argv, ":u:U:p:P:i:I:")) != -1) { 
+        switch(opt) {
+            // Username
+            case 'u':
+            case 'U':
+                strcpy(username, optarg);
+                break;
+            // Port number
+            case 'p':
+            case 'P': 
+                port = atoi(optarg);
+                break;
+            // IP address
+            case 'i':
+            case 'I':
+                strcpy(ip, optarg);
+                break; 
+            case '?': 
+                printf("unknown option: %c\n", optopt);
+                break; 
         }
-
-        printf("\nClient: %s\n", buffer);
-
-        promptPrinted = 0;
-
-        sem_wait(&promptSem);
-        if(!promptPrinted)
-            printPrompt();
-
-        sem_post(&promptSem);
     }
 
-    return NULL;
-}
+    // Set up server
+    serverSetup(port, ip);
 
-int main() {
-    serverSetup(PORT);
-
+    // Structure for client connection
     struct sockaddr_in client_addr;
     int addr_len = sizeof(client_addr);
 
+    // Accept connection from client
     if ((client_fd = accept(server_fd, (struct sockaddr *)&client_addr, (socklen_t *)&addr_len)) == -1) {
         perror("accept");
         exit(EXIT_FAILURE);
     }
 
-    pthread_t send_id, receive_id;
-    
-    sem_init(&promptSem, 0, 1);
+    // Extract information from client structure
+    char* clientIP = inet_ntoa(client_addr.sin_addr);
+    int clientPort = client_addr.sin_port;
 
-    pthread_create(&send_id, NULL, sendTo, NULL);
-    pthread_create(&receive_id, NULL, recvFrom, NULL);
+    // Initialize chat room and display information
+    system("clear");
+    printf("Username: %s\n", username);
+    printf("Connected to client %s:%d\n", clientIP, clientPort);
 
-    pthread_join(send_id, NULL);
-    pthread_join(receive_id, NULL);
+    // Start chat
+    chat(client_fd, username);
 
-    sem_close(&promptSem);
-
+    // Close sockets
+    close(client_fd);
+    close(server_fd);
 }

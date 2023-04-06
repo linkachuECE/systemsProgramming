@@ -1,3 +1,10 @@
+/*
+ *      AUTHOR: 		Ethan Braun
+ *      DATE CREATED: 	04/05/23
+ *      DESCRIPTION: 	The functions in this file are used to handle connections with individual clients
+ *      CONTRIBUTORS: 	None
+ */
+
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -9,10 +16,13 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
+// Max buffer size
 #define BUFFER_SIZE 1024
 
+// Client socket file descriptor
 int client_fd = 0;
 
+// Signal handler for closing the connection with the client and exiting the child process
 void closeChild(int signal){
     printf("Child process %d terminated\n\n", getpid());
     if(client_fd != -1)
@@ -20,6 +30,7 @@ void closeChild(int signal){
     exit(0);
 }
 
+// Continually loops, accepting information from the client and echoing it back
 int clientChild(struct sockaddr_in* client_addr, int cfd){
     client_fd = cfd;
     int serverChildID = getpid();
