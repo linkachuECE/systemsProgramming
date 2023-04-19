@@ -154,6 +154,7 @@ typedef int pthread_t;
 # include <stdlib.h>
 #endif
 #include <stdio.h>
+#include <string.h>
 
 #ifdef __GCC__
 #include <unistd.h>
@@ -164,7 +165,6 @@ typedef int pthread_t;
 
 #include <sys/types.h>
 #include <malloc.h>
-
 
 /*
  * Ultra-fast RNG: Use a fast hash of integers.
@@ -280,13 +280,18 @@ static void bin_alloc(struct bin *m, size_t size, unsigned r)
 	{
 		/* memalign */
 		if (m->size > 0) free(m->ptr);
-		m->ptr = memalign(sizeof(int) << r, size);
+
+		// Changing memalign to malloc
+		// m->ptr = memalign(sizeof(int) << r, size);
+		m->ptr = malloc(size);
 	}
 	else if (r < 20)
 	{
 		/* calloc */
 		if (m->size > 0) free(m->ptr);
-		m->ptr = calloc(size, 1);
+		// Changing calloc to malloc
+		//m->ptr = calloc(size, 1);
+		m->ptr = malloc(size);
 #if TEST > 0
 		if (zero_check(m->ptr, size))
 		{
@@ -304,7 +309,13 @@ static void bin_alloc(struct bin *m, size_t size, unsigned r)
 	{
 		/* realloc */
 		if (!m->size) m->ptr = NULL;
-		m->ptr = realloc(m->ptr, size);
+		
+		// Changing realloc to malloc
+		// m->ptr = realloc(m->ptr, size);
+		unsigned char* temp = (unsigned char*)malloc(size);
+		strcpy(temp, m->ptr);
+		free(m->ptr);
+		m->ptr = temp;
 	}
 	else
 	{
