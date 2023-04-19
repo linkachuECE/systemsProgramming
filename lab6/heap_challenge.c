@@ -24,9 +24,9 @@ void print_function()
 
 int main(int argc, char **argv)
 {
-  struct data *pointer1;
+  struct data *pointer1;  
   struct fp *pointer2;
-
+  
   pointer1 = malloc(sizeof(struct data));
   pointer2 = malloc(sizeof(struct fp));
   pointer2->fp = print_function;
