@@ -1,0 +1,676 @@
+desc: (none)
+cmd: ./test1threads10000total
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=329837701
+mem_heap_B=8767154
+mem_heap_extra_B=26766
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=591230988
+mem_heap_B=13727851
+mem_heap_extra_B=45141
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=1004868242
+mem_heap_B=1471417
+mem_heap_extra_B=4127
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=1535482806
+mem_heap_B=17236534
+mem_heap_extra_B=57258
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=1895121652
+mem_heap_B=12495448
+mem_heap_extra_B=38888
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=2285601271
+mem_heap_B=16858454
+mem_heap_extra_B=55658
+mem_stacks_B=0
+heap_tree=detailed
+n4: 16858454 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 15345549 0x400BCE: bin_alloc (t-test1.c:328)
+  n1: 9050584 0x400E48: malloc_test (t-test1.c:455)
+   n1: 9050584 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 9050584 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n1: 6294965 0x400D25: malloc_test (t-test1.c:431)
+   n1: 6294965 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 6294965 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n2: 1051869 0x400B9D: bin_alloc (t-test1.c:318)
+  n1: 530051 0x400E48: malloc_test (t-test1.c:455)
+   n1: 530051 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 530051 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n1: 521818 0x400D25: malloc_test (t-test1.c:431)
+   n1: 521818 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 521818 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n1: 280999 0x400B4D: bin_alloc (t-test1.c:298)
+  n0: 280999 in 2 places, all below massif's threshold (1.00%)
+ n0: 180037 in 4 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=7
+#-----------
+time=2739567768
+mem_heap_B=16914582
+mem_heap_extra_B=54946
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=3270169806
+mem_heap_B=16857693
+mem_heap_extra_B=52355
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=3594426579
+mem_heap_B=10698633
+mem_heap_extra_B=32855
+mem_stacks_B=0
+heap_tree=detailed
+n5: 10698633 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 9540329 0x400BCE: bin_alloc (t-test1.c:328)
+  n1: 9540329 0x400D25: malloc_test (t-test1.c:431)
+   n1: 9540329 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 9540329 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n2: 840390 0x400B9D: bin_alloc (t-test1.c:318)
+  n1: 840390 0x400D25: malloc_test (t-test1.c:431)
+   n1: 840390 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 840390 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n2: 146410 0x400B4D: bin_alloc (t-test1.c:298)
+  n1: 146410 0x400D25: malloc_test (t-test1.c:431)
+   n1: 146410 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 146410 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 107360 0x400C8D: malloc_test (t-test1.c:424)
+  n1: 107360 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+   n0: 107360 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n0: 64144 in 3 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=10
+#-----------
+time=3918163090
+mem_heap_B=18632249
+mem_heap_extra_B=60967
+mem_stacks_B=0
+heap_tree=peak
+n4: 18632249 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 17241845 0x400BCE: bin_alloc (t-test1.c:328)
+  n1: 13314561 0x400E48: malloc_test (t-test1.c:455)
+   n1: 13314561 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 13314561 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n1: 3927284 0x400D25: malloc_test (t-test1.c:431)
+   n1: 3927284 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 3927284 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n2: 979017 0x400B9D: bin_alloc (t-test1.c:318)
+  n1: 658216 0x400E48: malloc_test (t-test1.c:455)
+   n1: 658216 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 658216 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n1: 320801 0x400D25: malloc_test (t-test1.c:431)
+   n1: 320801 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 320801 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n1: 255208 0x400B4D: bin_alloc (t-test1.c:298)
+  n0: 255208 in 2 places, all below massif's threshold (1.00%)
+ n0: 156179 in 4 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=11
+#-----------
+time=4307281161
+mem_heap_B=16771194
+mem_heap_extra_B=53414
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=4873273962
+mem_heap_B=3322089
+mem_heap_extra_B=10247
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=5250602193
+mem_heap_B=6430950
+mem_heap_extra_B=21074
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=5816594849
+mem_heap_B=17251719
+mem_heap_extra_B=53185
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=6052425332
+mem_heap_B=17096835
+mem_heap_extra_B=55149
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=6476919473
+mem_heap_B=11822554
+mem_heap_extra_B=36014
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=6830664290
+mem_heap_B=17118803
+mem_heap_extra_B=52901
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=7396656155
+mem_heap_B=16515085
+mem_heap_extra_B=53587
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=7891898566
+mem_heap_B=16492655
+mem_heap_extra_B=54305
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=8174894410
+mem_heap_B=17041656
+mem_heap_extra_B=52560
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=8599388345
+mem_heap_B=2540453
+mem_heap_extra_B=7411
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=9165380368
+mem_heap_B=16752172
+mem_heap_extra_B=52036
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=9731372306
+mem_heap_B=17312586
+mem_heap_extra_B=55702
+mem_stacks_B=0
+heap_tree=detailed
+n4: 17312586 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 15941751 0x400BCE: bin_alloc (t-test1.c:328)
+  n1: 9997488 0x400E48: malloc_test (t-test1.c:455)
+   n1: 9997488 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 9997488 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n1: 5944263 0x400D25: malloc_test (t-test1.c:431)
+   n1: 5944263 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 5944263 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n2: 959537 0x400B9D: bin_alloc (t-test1.c:318)
+  n1: 497457 0x400E48: malloc_test (t-test1.c:455)
+   n1: 497457 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 497457 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n1: 462080 0x400D25: malloc_test (t-test1.c:431)
+   n1: 462080 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 462080 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n2: 261417 0x400B4D: bin_alloc (t-test1.c:298)
+  n1: 194329 0x400E48: malloc_test (t-test1.c:455)
+   n1: 194329 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 194329 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 67088 in 1 place, below massif's threshold (1.00%)
+ n0: 149881 in 4 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=24
+#-----------
+time=10250199274
+mem_heap_B=16446860
+mem_heap_extra_B=52756
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=10627528392
+mem_heap_B=16541993
+mem_heap_extra_B=50647
+mem_stacks_B=0
+heap_tree=detailed
+n4: 16541993 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 14959030 0x400BCE: bin_alloc (t-test1.c:328)
+  n1: 14959030 0x400D25: malloc_test (t-test1.c:431)
+   n1: 14959030 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 14959030 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n2: 1156537 0x400B9D: bin_alloc (t-test1.c:318)
+  n1: 1156537 0x400D25: malloc_test (t-test1.c:431)
+   n1: 1156537 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 1156537 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n2: 251120 0x400B4D: bin_alloc (t-test1.c:298)
+  n1: 251120 0x400D25: malloc_test (t-test1.c:431)
+   n1: 251120 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 251120 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 175306 in 4 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=26
+#-----------
+time=11004857376
+mem_heap_B=8295887
+mem_heap_extra_B=25073
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=11382186673
+mem_heap_B=6344489
+mem_heap_extra_B=19991
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=11948180278
+mem_heap_B=16819395
+mem_heap_extra_B=56997
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=12325509308
+mem_heap_B=17276360
+mem_heap_extra_B=55128
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=12702838451
+mem_heap_B=16654892
+mem_heap_extra_B=53060
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=13080168192
+mem_heap_B=16980095
+mem_heap_extra_B=54273
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=13457497133
+mem_heap_B=16222650
+mem_heap_extra_B=52710
+mem_stacks_B=0
+heap_tree=detailed
+n4: 16222650 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 14631220 0x400BCE: bin_alloc (t-test1.c:328)
+  n1: 9643221 0x400D25: malloc_test (t-test1.c:431)
+   n1: 9643221 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 9643221 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n1: 4987999 0x400E48: malloc_test (t-test1.c:455)
+   n1: 4987999 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 4987999 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n2: 1114145 0x400B9D: bin_alloc (t-test1.c:318)
+  n1: 837753 0x400D25: malloc_test (t-test1.c:431)
+   n1: 837753 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 837753 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n1: 276392 0x400E48: malloc_test (t-test1.c:455)
+   n1: 276392 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 276392 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n2: 307596 0x400B4D: bin_alloc (t-test1.c:298)
+  n1: 232408 0x400D25: malloc_test (t-test1.c:431)
+   n1: 232408 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 232408 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 75188 in 1 place, below massif's threshold (1.00%)
+ n0: 169689 in 4 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=33
+#-----------
+time=13834826127
+mem_heap_B=16968123
+mem_heap_extra_B=55573
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=14400819874
+mem_heap_B=8094775
+mem_heap_extra_B=25009
+mem_stacks_B=0
+heap_tree=detailed
+n5: 8094775 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 7252036 0x400BCE: bin_alloc (t-test1.c:328)
+  n1: 7252036 0x400D25: malloc_test (t-test1.c:431)
+   n1: 7252036 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 7252036 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n2: 594344 0x400B9D: bin_alloc (t-test1.c:318)
+  n1: 594344 0x400D25: malloc_test (t-test1.c:431)
+   n1: 594344 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 594344 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n2: 132155 0x400B4D: bin_alloc (t-test1.c:298)
+  n1: 132155 0x400D25: malloc_test (t-test1.c:431)
+   n1: 132155 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 132155 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 107360 0x400C8D: malloc_test (t-test1.c:424)
+  n1: 107360 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+   n0: 107360 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n0: 8880 in 3 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=35
+#-----------
+time=14872480715
+mem_heap_B=16562442
+mem_heap_extra_B=50462
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=15296975265
+mem_heap_B=1443868
+mem_heap_extra_B=4412
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=15721469899
+mem_heap_B=17042577
+mem_heap_extra_B=55383
+mem_stacks_B=0
+heap_tree=detailed
+n4: 17042577 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 15662387 0x400BCE: bin_alloc (t-test1.c:328)
+  n1: 9743659 0x400E48: malloc_test (t-test1.c:455)
+   n1: 9743659 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 9743659 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n1: 5918728 0x400D25: malloc_test (t-test1.c:431)
+   n1: 5918728 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 5918728 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n2: 974108 0x400B9D: bin_alloc (t-test1.c:318)
+  n1: 540012 0x400E48: malloc_test (t-test1.c:455)
+   n1: 540012 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 540012 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n1: 434096 0x400D25: malloc_test (t-test1.c:431)
+   n1: 434096 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 434096 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n1: 249761 0x400B4D: bin_alloc (t-test1.c:298)
+  n0: 249761 in 2 places, all below massif's threshold (1.00%)
+ n0: 156321 in 4 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=38
+#-----------
+time=16287463206
+mem_heap_B=7799892
+mem_heap_extra_B=23628
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=16711957739
+mem_heap_B=16857457
+mem_heap_extra_B=54711
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=17136452437
+mem_heap_B=10304439
+mem_heap_extra_B=31857
+mem_stacks_B=0
+heap_tree=detailed
+n5: 10304439 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 9110623 0x400BCE: bin_alloc (t-test1.c:328)
+  n1: 9110623 0x400D25: malloc_test (t-test1.c:431)
+   n1: 9110623 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 9110623 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n2: 867171 0x400B9D: bin_alloc (t-test1.c:318)
+  n1: 867171 0x400D25: malloc_test (t-test1.c:431)
+   n1: 867171 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 867171 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n2: 183880 0x400B4D: bin_alloc (t-test1.c:298)
+  n1: 183880 0x400D25: malloc_test (t-test1.c:431)
+   n1: 183880 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 183880 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 107360 0x400C8D: malloc_test (t-test1.c:424)
+  n1: 107360 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+   n0: 107360 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n0: 35405 in 3 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=41
+#-----------
+time=17702445276
+mem_heap_B=16518415
+mem_heap_extra_B=53353
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=18126939778
+mem_heap_B=7393580
+mem_heap_extra_B=23124
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=18692932525
+mem_heap_B=16953235
+mem_heap_extra_B=54533
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=19117427085
+mem_heap_B=16910467
+mem_heap_extra_B=56445
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=19683419818
+mem_heap_B=7814538
+mem_heap_extra_B=24014
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=20107914652
+mem_heap_B=16576554
+mem_heap_extra_B=54126
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=20673907770
+mem_heap_B=14188566
+mem_heap_extra_B=43826
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=21239900800
+mem_heap_B=16917097
+mem_heap_extra_B=54399
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=21664395458
+mem_heap_B=7122572
+mem_heap_extra_B=21588
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=21900226183
+mem_heap_B=15517838
+mem_heap_extra_B=47402
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=22136056764
+mem_heap_B=17006042
+mem_heap_extra_B=53238
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=22371887387
+mem_heap_B=17159210
+mem_heap_extra_B=56118
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=22607718042
+mem_heap_B=17881853
+mem_heap_extra_B=57651
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=22843548738
+mem_heap_B=17131002
+mem_heap_extra_B=57294
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=23079379291
+mem_heap_B=16778307
+mem_heap_extra_B=55981
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=23315209791
+mem_heap_B=734388
+mem_heap_extra_B=1852
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=23551040386
+mem_heap_B=6045560
+mem_heap_extra_B=17952
+mem_stacks_B=0
+heap_tree=detailed
+n5: 6045560 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 5239093 0x400BCE: bin_alloc (t-test1.c:328)
+  n1: 5239093 0x400D25: malloc_test (t-test1.c:431)
+   n1: 5239093 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 5239093 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n2: 563079 0x400B9D: bin_alloc (t-test1.c:318)
+  n1: 563079 0x400D25: malloc_test (t-test1.c:431)
+   n1: 563079 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 563079 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 107360 0x400C8D: malloc_test (t-test1.c:424)
+  n1: 107360 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+   n0: 107360 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+ n2: 104009 0x400B4D: bin_alloc (t-test1.c:298)
+  n1: 104009 0x400D25: malloc_test (t-test1.c:431)
+   n1: 104009 0x4E34EA4: start_thread (in /usr/lib64/libpthread-2.17.so)
+    n0: 104009 0x5147B0C: clone (in /usr/lib64/libc-2.17.so)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 32019 in 3 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=58
+#-----------
+time=23786871016
+mem_heap_B=8197652
+mem_heap_extra_B=24764
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=24022701605
+mem_heap_B=6126277
+mem_heap_extra_B=18715
+mem_stacks_B=0
+heap_tree=empty

@@ -71,8 +71,10 @@ static int pthread_create_wrapper(void *args)
 /* Visual Studio miscompiles this if it is inlined */
 static int pthread_create(pthread_t *th, void *attr, void *(* func)(void *), void *arg)
 {
-	struct _pthread_v *tv = calloc(1, sizeof(struct _pthread_v));
-	
+	// Replaced calloc with malloc
+	// struct _pthread_v *tv = calloc(1, sizeof(struct _pthread_v));
+	struct _pthread_v *tv = malloc(sizof(struct _pthread_v));	
+
 	/* Ignore attributes for now */
 	(void) attr;
 	
@@ -315,7 +317,7 @@ static void bin_alloc(struct bin *m, size_t size, unsigned r)
 		// Changing realloc to malloc
 		// m->ptr = realloc(m->ptr, size);
 		unsigned char* temp = (unsigned char*)malloc(size);
-		strcpy(temp, m->ptr);
+		strcpy((char*)temp, (char*)m->ptr);
 		free(m->ptr);
 		m->ptr = temp;
 	}
