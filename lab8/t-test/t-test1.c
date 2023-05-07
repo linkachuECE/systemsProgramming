@@ -18,9 +18,12 @@
 #define TEST 0
 #endif
 
+#ifndef N_TOTAL
 #define N_TOTAL		1000
+#endif
+
 #ifndef N_THREADS	
-#define N_THREADS	3
+#define N_THREADS	1
 #endif
 #ifndef N_TOTAL_PRINT
 #define N_TOTAL_PRINT 50
@@ -69,7 +72,8 @@ static int pthread_create_wrapper(void *args)
 /* Visual Studio miscompiles this if it is inlined */
 static int pthread_create(pthread_t *th, void *attr, void *(* func)(void *), void *arg)
 {
-	struct _pthread_v *tv = calloc(1, sizeof(struct _pthread_v));
+	// struct _pthread_v *tv = calloc(1, sizeof(struct _pthread_v));
+	struct _pthread_v *tv = malloc(sizeof(struct _pthread_v));
 	
 	/* Ignore attributes for now */
 	(void) attr;
@@ -280,13 +284,15 @@ static void bin_alloc(struct bin *m, size_t size, unsigned r)
 	{
 		/* memalign */
 		if (m->size > 0) free(m->ptr);
-		m->ptr = memalign(sizeof(int) << r, size);
+		// m->ptr = memalign(sizeof(int) << r, size);
+		m->ptr = malloc(size);
 	}
 	else if (r < 20)
 	{
 		/* calloc */
 		if (m->size > 0) free(m->ptr);
-		m->ptr = calloc(size, 1);
+		//m->ptr = calloc(size, 1);
+		m->ptr = malloc(size);
 #if TEST > 0
 		if (zero_check(m->ptr, size))
 		{

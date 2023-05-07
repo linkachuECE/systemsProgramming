@@ -7,13 +7,12 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "-Wall",
-                "src/*.c",
+                "${file}",
                 "-o",
-                "${fileDirname}/bin/exe"
+                "${fileDirname}/${fileBasenameNoExtension}"
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${fileDirname}"
             },
             "problemMatcher": [
                 "$gcc"
